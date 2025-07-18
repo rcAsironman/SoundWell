@@ -16,7 +16,7 @@ end
 
 target 'SoundWell' do
   config = use_native_modules!
-
+  
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
@@ -31,5 +31,6 @@ target 'SoundWell' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   end
 end
