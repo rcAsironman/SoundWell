@@ -7,22 +7,15 @@ import RNBootSplash from "react-native-bootsplash"
 import { useEffect } from "react";
 
 export default function App() {
-  const statusBarColor = '#DA2820'; // or '#DA2829'
+  const statusBarColor = 'white'; // or '#DA2829'
   const isAndroid = Platform.OS === 'android';
 
   useEffect(() => {
-    const init = async () => {
-      // Simulate some loading (e.g., API, fonts, etc)
-      await new Promise(resolve => setTimeout(resolve, 1000)); // 2 seconds
-
-      // Then hide splash
-      RNBootSplash.hide({ fade: true });
-    };
-
-    init();
+    RNBootSplash.hide({ fade: true });
   }, []);
   return (
     <SafeAreaProvider  style={{flex: 1}}>
+       <View style={{flex:1, backgroundColor: 'white'}}>
        {isAndroid && (
         <View style={{ height: 24, backgroundColor: statusBarColor }} />
       )}
@@ -33,6 +26,7 @@ export default function App() {
         translucent={false}
       />
          <LoginScreen/>
+       </View>
     </SafeAreaProvider>
   );
 }
