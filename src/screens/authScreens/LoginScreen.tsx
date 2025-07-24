@@ -68,7 +68,7 @@ const LoginScreen = () => {
                                 }}
                             />
                         </View>
-                        <Text className='text-2xl font-medium tracking-[1px] mt-8 md:text-[30px] md:mt-[105px]'>Login</Text>
+                        <Text className='text-2xl font-medium tracking-[1px] mt-8 md:text-[30px] md:mt-[105px]'>SignIn</Text>
 
                         <View className='mt-24'>
                             <TextInput

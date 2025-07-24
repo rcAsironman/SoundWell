@@ -5,6 +5,10 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar, Platform } from 'react-native';
 import RNBootSplash from "react-native-bootsplash"
 import { useEffect } from "react";
+import RegisterScreen from "./src/screens/authScreens/RegisterScreen";
+import ForgotPasswordScreen from "./src/screens/authScreens/ForgotPasswordScreen";
+import Toast from "react-native-toast-message";
+import ToastComponent from "./src/components/ToastComponent";
 
 export default function App() {
   const statusBarColor = 'white'; // or '#DA2829'
@@ -25,7 +29,10 @@ export default function App() {
         backgroundColor={statusBarColor}
         translucent={false}
       />
-         <LoginScreen/>
+        <ForgotPasswordScreen/>
+         {/* <RegisterScreen/> */}
+         {/* <LoginScreen/> */}
+       <ToastComponent/>
        </View>
     </SafeAreaProvider>
   );
