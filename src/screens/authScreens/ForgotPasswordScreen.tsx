@@ -130,12 +130,15 @@ const ForgotPasswordScreen = () => {
                       value={email}
                       className='text-[18px] mt-[10px] border-b pb-2 pl-1 md:text-[28px] md:mt-[20px]'
                       onChangeText={setEmail}
+                      style={{
+                        letterSpacing: 0,
+                      }}
                     />
                     <TouchableOpacity
                       onPress={handleSendOtp}
-                      className='mt-24 bg-soundWell-primary rounded-full py-3 px-6 items-center justify-center'
+                      className='mt-24 bg-soundWell-primary rounded-full py-3 px-6 items-center justify-center md:py-6'
                     >
-                      <Text className='text-white text-xl font-semibold'>Send OTP</Text>
+                      <Text className='text-white text-xl font-semibold md:text-2xl'>Send OTP</Text>
                     </TouchableOpacity>
                   </>
                 )
@@ -168,22 +171,22 @@ const ForgotPasswordScreen = () => {
 
                     <TouchableOpacity
                       onPress={handleVerifyOtp}
-                      className={` ${isSendOtpClicked && otp.length === 6 ? "bg-soundWell-primary" : "bg-gray-400"} mt-24  rounded-full py-3 px-6 items-center justify-center`}
+                      className={` ${isSendOtpClicked && otp.length === 6 ? "bg-soundWell-primary" : "bg-gray-400"} mt-24  rounded-full py-3 px-6 items-center justify-center md:py-6`}
                     >
-                      <Text className='text-white text-xl font-semibold'>Verify OTP</Text>
+                      <Text className='text-white text-xl font-semibold md:text-2xl'>Verify OTP</Text>
                     </TouchableOpacity>
 
                     <View className='mt-12 items-center'>
                       {
                         hasOtpSent ? (
-                          <Text className='text-sm text-gray-500'>{`Resend OTP in ${timer} second(s)`}</Text>
+                          <Text className='text-sm text-gray-500 md:text-xl'>{`Resend OTP in ${timer} second(s)`}</Text>
                         )
                         :
                         (
                           <TouchableOpacity
                           onPress={handleOtpTrigger}
                           >
-                            <Text className='text-sm text-soundWell-primary'>Resend OTP</Text>
+                            <Text className='text-sm text-soundWell-primary md:text-xl'>Resend OTP</Text>
                           </TouchableOpacity>
                         )
                       }

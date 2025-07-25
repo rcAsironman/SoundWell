@@ -9,6 +9,7 @@ import RegisterScreen from "./src/screens/authScreens/RegisterScreen";
 import ForgotPasswordScreen from "./src/screens/authScreens/ForgotPasswordScreen";
 import Toast from "react-native-toast-message";
 import ToastComponent from "./src/components/ToastComponent";
+import PersonalInfo from "./src/screens/PersonalInfo";
 
 export default function App() {
   const statusBarColor = 'white'; // or '#DA2829'
@@ -29,7 +30,8 @@ export default function App() {
         backgroundColor={statusBarColor}
         translucent={false}
       />
-        <ForgotPasswordScreen/>
+      <PersonalInfo/>
+        {/* <ForgotPasswordScreen/> */}
          {/* <RegisterScreen/> */}
          {/* <LoginScreen/> */}
        <ToastComponent/>
