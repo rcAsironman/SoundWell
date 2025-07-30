@@ -22,7 +22,6 @@ type UserInputs = {
   firstName: string;
   lastName?: string; // Optional field for last name
   email: string;
-  mobile: string;
   password: string;
 }
 
@@ -36,7 +35,6 @@ const RegisterScreen = () => {
       firstName: '',
       lastName: '', // Optional field for last name
       email: '',
-      mobile: '',
       password: '',
   })
 
@@ -83,21 +81,25 @@ const RegisterScreen = () => {
 
                       <View className='mt-24'>
                       <TextInput
+                              value={userInputs.firstName}
                               className='text-[18px] mt-[10px] border-b pb-2 pl-1 md:text-[28px] md:mt-[20px]'
                               placeholder='First Name'
                               onChangeText={(text) => setUserInputs(prev => ({ ...prev, firstName: text }))}
                           />
                           <TextInput
+                              value={userInputs.lastName}
                               className='text-[18px] mt-[40px] border-b pb-2 pl-1 md:text-[28px] md:mt-[20px]'
                               placeholder='Last Name(optional)'
                               onChangeText={(text) => setUserInputs(prev => ({ ...prev, lastName: text }))}
                           />
                           <TextInput
+                              value={userInputs.email}
                               className='text-[18px] mt-[40px] border-b pb-2 pl-1 md:text-[28px] md:mt-[20px]'
                               placeholder='Email'
                               onChangeText={(text) => setUserInputs(prev => ({ ...prev, email: text }))}
                           />
                           <TextInput
+                              value={userInputs.password}
                               placeholder='Password'
                               onChangeText={(text) => setUserInputs(prev => ({ ...prev, password: text }))}
                               className='text-[18px] mt-[40px] border-b pb-2 pl-1 md:text-[28px] md:mt-[90px]'
@@ -107,7 +109,9 @@ const RegisterScreen = () => {
                   </View>
                   <View className='flex-1 items-center justify-end mt-40'>
                       <View className='w-full px-8'>
-                          <TouchableOpacity className='bg-soundWell-primary rounded-full py-3 md:h-[70px] flex items-center justify-center'>
+                          <TouchableOpacity 
+                          onPress={handleRegister}
+                          className='bg-soundWell-primary rounded-full py-3 md:h-[70px] flex items-center justify-center'>
                               <Text className='text-white text-center font-semibold text-lg tracking-[1px] md:text-3xl'>Register</Text>
                           </TouchableOpacity>
                       </View>

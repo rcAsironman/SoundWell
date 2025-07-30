@@ -154,7 +154,7 @@ const ForgotPasswordScreen = () => {
                       </TouchableOpacity>
 
                     </View>
-                    <Text className='text-soundWell-textColor text-[14px] md:text-[24px] font-regular'>Please check your email for the OTP.</Text>
+                    <Text className='text-soundWell-textColor text-[14px] md:text-[24px] font-regular'>Please check your email for the verification code.</Text>
                     <TextInput
                       placeholder='Verification Code'
                       maxLength={6}
@@ -173,7 +173,7 @@ const ForgotPasswordScreen = () => {
                       onPress={handleVerifyOtp}
                       className={` ${isSendOtpClicked && otp.length === 6 ? "bg-soundWell-primary" : "bg-gray-400"} mt-24  rounded-full py-3 px-6 items-center justify-center md:py-6`}
                     >
-                      <Text className='text-white text-xl font-semibold md:text-2xl'>Verify OTP</Text>
+                      <Text className='text-white text-xl font-semibold md:text-2xl'>Confirm Verification Code</Text>
                     </TouchableOpacity>
 
                     <View className='mt-12 items-center'>

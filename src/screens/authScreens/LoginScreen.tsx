@@ -72,11 +72,13 @@ const LoginScreen = () => {
 
                         <View className='mt-24'>
                             <TextInput
+                                value={userInputs.email}
                                 className='text-[18px] mt-[10px] border-b pb-2 pl-1 md:text-[28px] md:mt-[20px]'
                                 placeholder='Email'
                                 onChangeText={(text) => setUserInputs(prev => ({ ...prev, email: text }))}
                             />
                             <TextInput
+                                value={userInputs.password}
                                 placeholder='Password'
                                 onChangeText={(text) => setUserInputs(prev => ({ ...prev, password: text }))}
                                 className='text-[18px] mt-[50px] border-b pb-2 pl-1 md:text-[28px] md:mt-[90px]'
