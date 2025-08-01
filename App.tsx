@@ -11,6 +11,8 @@ import Toast from "react-native-toast-message";
 import ToastComponent from "./src/components/ToastComponent";
 import PersonalInfo from "./src/screens/PersonalInfo";
 import HomeScreen from "./src/screens/HomeScreen";
+import HeaderComponent from "./src/components/HeaderComponent";
+import AudioRecordingScreen from "./src/screens/AudioRecordingScreen";
 
 export default function App() {
   const statusBarColor = 'white'; // or '#DA2829'
@@ -31,8 +33,8 @@ export default function App() {
         backgroundColor={statusBarColor}
         translucent={false}
       />
-
-        <HomeScreen/>
+      <AudioRecordingScreen/>
+        {/* <HomeScreen/> */}
         {/* <PersonalInfo/> */}
         {/* <ForgotPasswordScreen/> */}
          {/* <RegisterScreen/> */}
