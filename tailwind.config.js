@@ -10,7 +10,7 @@ module.exports = {
     extend: {
       colors: {
         soundWell: {
-          primary: "#94abfe",      // Airbnb red
+          primary: "#94abfe",      // soundWell blue
           secondary: "#bfcfff",    // Soft gray
           textColor: "#000000",
           gray: "#c2c2c2"

@@ -1,45 +1,50 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { useEffect, useRef } from 'react';
+import { View, StyleSheet, Animated } from 'react-native';
 
-const ProgressIndicator = ({currentStep, totalSteps}:{currentStep: number, totalSteps: Number}) => {
+const ProgressIndicator = ({
+  currentStep,
+  totalSteps,
+}: {
+  currentStep: number;
+  totalSteps: number;
+}) => {
+  const progressAnim = useRef(new Animated.Value(0)).current;
 
+  const targetProgress = Math.min(currentStep / totalSteps, 1);
+
+  useEffect(() => {
+    Animated.timing(progressAnim, {
+      toValue: targetProgress,
+      duration: 300, // smooth transition
+      useNativeDriver: false, // flex/width cannot use native driver
+    }).start();
+  }, [targetProgress]);
+
+  const animatedWidth = progressAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0%', '100%'],
+  });
 
   return (
     <View style={styles.container}>
-       
-        <View style={styles.progressBar}>
-            <View
-            style={[
-                styles.progressFill,
-                { width: `${(currentStep / totalSteps) * 100}%` },
-            ]}
-            />
-        </View>
-        <Text style={{ fontSize: 14, marginTop: 10 }}>
-            {Math.round((currentStep / totalSteps) * 100)}% Complete
-        </Text>
+      <Animated.View style={[styles.progress, { width: animatedWidth }]} />
     </View>
-  )
-}
+  );
+};
 
 export default ProgressIndicator;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  progressBar: {
-    height: 20,
-    width: '100%',
-    backgroundColor: '#e0e0df',
-    borderRadius: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#e0e0e0',
     overflow: 'hidden',
+    marginVertical: 10,
+    width: '100%',
   },
-  progressFill: {
+  progress: {
     height: '100%',
-    backgroundColor: '#3b5998',
-    width: '50%', // This should be dynamically set based on progress
+    backgroundColor: '#94abfe',
   },
 });
