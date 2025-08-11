@@ -8,7 +8,7 @@ import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
 import LottieView from 'lottie-react-native';
 import AudioLottie from '/Users/kmangineni/Downloads/SoundWell/assets/AudioRecording.json'
 
-const AudioRecordingScreen = () => {
+const AudioRecordingScreen = ({navigation}: {navigation: any}) => {
 
     const currentStep = 5;
     const totalSteps = 6;
@@ -92,7 +92,9 @@ const AudioRecordingScreen = () => {
                 text-red-500
                 font-semibold
                 text-xl
-                '>Exit</Text>
+                '
+                onPress={() => {navigation.navigate('Home')}}
+                >Exit</Text>
                     </TouchableOpacity>
                 </View>
                 <ProgressIndicator currentStep={currentStep} totalSteps={totalSteps} />

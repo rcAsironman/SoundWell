@@ -3,10 +3,13 @@ import React from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
+import { useNavigation } from '@react-navigation/native'
+
 
 const HeaderComponent = () => {
     const insets = useSafeAreaInsets();
     const paddingTop = insets.top;
+    const nav = useNavigation();
     return (
         <View
             className='bg-soundWell-primary 
@@ -25,7 +28,9 @@ const HeaderComponent = () => {
             h-12
             w-12
             rounded-full
-            '>
+            '
+            onPress={() => {nav.navigate('Profile')}}
+            >
                 <FontAwesomeIcon
                     icon={faUser}
                     size={18}

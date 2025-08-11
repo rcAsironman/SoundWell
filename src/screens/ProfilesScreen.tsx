@@ -1,18 +1,16 @@
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity } from 'react-native'
 import React from 'react'
 import ProfileCard from '../components/ProfileCard'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { users } from '../data/users'
 import HeaderComponent from '../components/HeaderComponent'
 
-const ProfilesScreen = () => {
+const ProfilesScreen = ({navigation}: {navigation: any}) => {
   const insets = useSafeAreaInsets();
   const paddingTop = insets.top;
 
   return (
     <View className='flex-1'>
-      {/* Header */}
-      <HeaderComponent/>
       <View
         className='bg-soundWell-primary h-36'
         style={{ paddingTop: paddingTop }}
@@ -26,7 +24,11 @@ const ProfilesScreen = () => {
         numColumns={2}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <ProfileCard imgUrl={item?.url} name={item?.name} />
+          <TouchableOpacity
+          onPress={() => {navigation.navigate('Home')}}
+          >
+                      <ProfileCard imgUrl={item?.url} name={item?.name} />
+          </TouchableOpacity>
         )}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ padding: 16 }}

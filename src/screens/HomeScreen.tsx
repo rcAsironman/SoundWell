@@ -10,7 +10,7 @@ import ChatBotComponent from '../components/ChatBotComponent';
 
 
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}: {navigation: any}) => {
     const insets = useSafeAreaInsets();
     const paddingTop = insets.top;
 
@@ -23,7 +23,9 @@ const HomeScreen = () => {
                     paddingHorizontal: 1,
                 }}
             >
-                <TouchableOpacity>
+                <TouchableOpacity
+                onPress={() => navigation.navigate('Profiles')}
+                >
                     <View className='
             flex
             flex-row
@@ -31,7 +33,9 @@ const HomeScreen = () => {
             items-center
             mt-4
             px-4
-            '>
+            '
+            
+            >
                         <FontAwesomeIcon
                             icon={faArrowLeft}
                             size={18}
@@ -68,7 +72,8 @@ const HomeScreen = () => {
         self-center
         mt-8
         '
-
+            
+        onPress={() => navigation.navigate('AudioRecording')}
                 >
                     <Text
                         className='

@@ -13,6 +13,8 @@ import PersonalInfo from "./src/screens/PersonalInfo";
 import HomeScreen from "./src/screens/HomeScreen";
 import HeaderComponent from "./src/components/HeaderComponent";
 import AudioRecordingScreen from "./src/screens/AudioRecordingScreen";
+import ProfileScreen from "./src/screens/ProfileScreen";
+import RootNavigation from "./src/navigation/RootNavigation";
 
 export default function App() {
   const statusBarColor = 'white'; // or '#DA2829'
@@ -33,11 +35,12 @@ export default function App() {
         backgroundColor={statusBarColor}
         translucent={false}
       />
-      <AudioRecordingScreen/>
+        <RootNavigation/>
+        {/* <AudioRecordingScreen/> */}
         {/* <HomeScreen/> */}
         {/* <PersonalInfo/> */}
         {/* <ForgotPasswordScreen/> */}
-         {/* <RegisterScreen/> */}
+        {/* <RegisterScreen/> */}
         {/* <LoginScreen/> */}
        <ToastComponent/>
        </View>
