@@ -15,6 +15,7 @@ import HeaderComponent from "./src/components/HeaderComponent";
 import AudioRecordingScreen from "./src/screens/AudioRecordingScreen";
 import ProfileScreen from "./src/screens/ProfileScreen";
 import RootNavigation from "./src/navigation/RootNavigation";
+import AudioRecorderAndPlayer from "./src/screens/AudioRecorderAndPlayer";
 
 export default function App() {
   const statusBarColor = 'white'; // or '#DA2829'
@@ -35,6 +36,7 @@ export default function App() {
         backgroundColor={statusBarColor}
         translucent={false}
       />
+      {/* <AudioRecorderAndPlayer/> */}
         <RootNavigation/>
         {/* <AudioRecordingScreen/> */}
         {/* <HomeScreen/> */}
