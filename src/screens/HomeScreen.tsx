@@ -104,7 +104,6 @@ const HomeScreen = ({navigation}: {navigation: any}) => {
                         paddingHorizontal: 4,
                     }}
                     data={helpfulLinks}
-                    key={(item : any) => item.id.toString()}
                     renderItem={({ item }) => (
                         <HelpfulLinkCardComponent imgUrl={item.img} url={item.url} />
                     )}

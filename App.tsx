@@ -16,21 +16,61 @@ import AudioRecordingScreen from "./src/screens/AudioRecordingScreen";
 import ProfileScreen from "./src/screens/ProfileScreen";
 import RootNavigation from "./src/navigation/RootNavigation";
 import AudioRecorderAndPlayer from "./src/screens/AudioRecorderAndPlayer";
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 export default function App() {
-  const statusBarColor = 'white'; // or '#DA2829'
+  const statusBarColor = '#94abfe'; 
   const isAndroid = Platform.OS === 'android';
 
   useEffect(() => {
     RNBootSplash.hide({ fade: true });
   }, []);
+
+  useEffect(() => {
+    const requestPermissions = async () => {
+      let microphonePermission;
+      let storagePermission;
+  
+      // Request Microphone Permission
+      if (Platform.OS === 'ios') {
+          microphonePermission = PERMISSIONS.IOS.MICROPHONE;
+      } else if (Platform.OS === 'android') {
+          microphonePermission = PERMISSIONS.ANDROID.RECORD_AUDIO;
+      }
+  
+      // Only call request if microphonePermission has a value
+      if (microphonePermission) {
+          const micResult = await request(microphonePermission);
+          if (micResult === RESULTS.GRANTED) {
+              console.log('Microphone permission granted.');
+          } else {
+              console.warn('Microphone permission denied.');
+          }
+      }
+  
+      // Request Storage/Photo Library Permission
+      if (Platform.OS === 'ios') {
+          storagePermission = PERMISSIONS.IOS.PHOTO_LIBRARY;
+      } else if (Platform.OS === 'android') {
+          storagePermission = PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE;
+      }
+  
+      // Only call request if storagePermission has a value
+      if (storagePermission) {
+          const storageResult = await request(storagePermission);
+          if (storageResult === RESULTS.GRANTED) {
+              console.log('Storage/Photo Library permission granted.');
+          } else {
+              console.warn('Storage/Photo Library permission denied.');
+          }
+      }
+  };
+
+    requestPermissions();
+  }, []);
   return (
     <SafeAreaProvider  style={{flex: 1}}>
        <View style={{flex:1, backgroundColor: 'white'}}>
-       {isAndroid && (
-        <View style={{ height: 24, backgroundColor: statusBarColor }} />
-      )}
-
       <StatusBar
         barStyle="dark-content"
         backgroundColor={statusBarColor}

@@ -10,6 +10,8 @@ const ProfileCard = ({ imgUrl, name }: { imgUrl: string, name: string }) => {
         w-40 
         rounded-[15px] 
         m-4
+        justify-evenly
+        itens-center
       "
       style={{
         // Shadow for iOS
@@ -18,12 +20,12 @@ const ProfileCard = ({ imgUrl, name }: { imgUrl: string, name: string }) => {
         shadowOpacity: 0.1,
         shadowRadius: 6,
         // Elevation for Android
-        elevation: 5,
+        
       }}
     >
       <View
         className="
-          bg-green-500 
+          bg-soundWell-primary 
           rounded-full 
           items-center 
           justify-center 
@@ -48,10 +50,12 @@ const ProfileCard = ({ imgUrl, name }: { imgUrl: string, name: string }) => {
         className="
           text-soundWell-primary 
           text-xl 
-          font-regular 
-          self-center 
+          self-center
           mt-4
         "
+        style={{
+          fontSize: Platform.OS === 'ios' ? 18 : 13,
+        }}
       >
         {name}
       </Text>

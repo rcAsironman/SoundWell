@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Platform } from 'react-native'
 import React from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -19,7 +19,10 @@ const HeaderComponent = () => {
             items-center
             px-4
             '
-            style={{ paddingTop: paddingTop }}
+            style={{ paddingTop: paddingTop, 
+                height: Platform.OS === 'android' ? paddingTop + 90 : paddingTop + 90
+
+            }}
         >
             {/* Header */}
             <Text className='text-white text-2xl font-bold'>SoundWell</Text>
