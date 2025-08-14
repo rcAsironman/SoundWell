@@ -4,12 +4,19 @@ import HeaderComponent from '../components/HeaderComponent'
 import ProgressIndicator from '../components/ProgressIndicator'
 import Tts from 'react-native-tts';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
+import { faMicrophone, faArrowRotateLeft, faArrowRotateRight, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 import LottieView from 'lottie-react-native';
 import AudioLottie from '/Users/kmangineni/Downloads/SoundWell/assets/AudioRecording.json'
-import { startRecording, stopRecording } from '../services/AudioService';
 import { Player } from '@react-native-community/audio-toolkit';
 import Slider from '@react-native-community/slider';
+import {
+    startRecording,
+    stopRecording,
+    startPlayback,
+    stopPlayback,
+    seekPlayback,
+    getDuration
+} from '../services/AudioService';
 
 
 const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
@@ -29,8 +36,8 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
     // State for playback
     const [player, setPlayer] = useState<Player | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [playbackPosition, setPlaybackPosition] = useState(0);
-    const [audioDuration, setAudioDuration] = useState(0);
+    const [position, setPosition] = useState(0);
+    const [duration, setDuration] = useState(0);
 
     useEffect(() => {
         Tts.setDefaultLanguage('en-US');
@@ -63,65 +70,44 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
     const handleRecording = () => {
         Tts.stop();
         setIsRecordingStarted(true);
-        startRecording();
+        startRecording(currentStep);
 
     }
 
-    const handleRecordingStop = async () => {
-        setIsRecordingStarted(false)
-        try {
-            const path = await stopRecording();
-            Alert.alert(path);
-            setRecordingUri(path);
-        } catch (e) {
-            console.error('Failed to stop recording:', e);
-        }
+    const handleStopRecording = () => {
+        const audioPath = stopRecording();
+        setIsRecordingStarted(false);
+        setRecordingUri(audioPath); // Assuming the recorded file is saved as 'hello.aac'
     }
-
-    const startPlayback = (uri: string) => {
-        if (player) player.destroy();
-
-        const newPlayer = new Player(uri, { autoDestroy: false });
-        newPlayer.play(() => {
-            setIsPlaying(true);
-            setAudioDuration(newPlayer.duration);
-
-            const interval = setInterval(() => {
-                newPlayer.getCurrentTime((time) => setPlaybackPosition(time));
-            }, 500);
-
-            newPlayer.on('ended', () => {
-                setIsPlaying(false);
-                clearInterval(interval);
-            });
-        });
-        setPlayer(newPlayer);
-    };
-
-    const stopPlayback = () => {
-        if (player) {
-            player.stop();
-            setIsPlaying(false);
-            setPlaybackPosition(0);
-        }
-    };
 
     const handlePlaybackToggle = () => {
+        if (!recordingUri) return;
+
         if (isPlaying) {
             stopPlayback();
-        } else if (recordingUri) {
-            startPlayback(recordingUri);
+            setIsPlaying(false);
+        } else {
+            
+            startPlayback(
+                (pos) => setPosition(pos),       // updates slider
+                () => {                          // playback ended
+                    setIsPlaying(false);
+                    setPosition(0);
+                },
+                (dur) => setDuration(dur)        // set duration after player is ready
+            );
+            setIsPlaying(true);
         }
     };
 
+
+
     const skipSeconds = (seconds: number) => {
-        if (player && recordingUri) {
-            let newPosition = playbackPosition + (seconds * 1000);
-            newPosition = Math.max(0, Math.min(newPosition, audioDuration));
-            player.seek(newPosition);
-            setPlaybackPosition(newPosition);
-        }
+        seekPlayback(position + seconds * 1000);
+        setPosition(position + seconds * 1000);
     };
+
+
 
     return (
         <View style={{
@@ -186,7 +172,7 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
 
                     <TouchableOpacity
                         onPress={handleSpeak}
-                        disabled={isRecordingStarted}
+                        disabled={isRecordingStarted || isPlaying}
                         className='
                         px-4
                         py-2
@@ -194,7 +180,7 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
                         
                     '
                         style={{
-                            backgroundColor: isRecordingStarted ? 'gray' : 'black'
+                            backgroundColor: isRecordingStarted || isPlaying ? 'gray' : 'black'
                         }}
                     >
                         <Text
@@ -211,18 +197,78 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
 
                 {recordingUri && (
                     <>
-                     <Slider
+
+                        <Slider
                             style={styles.slider}
+                            thumbTintColor='black'
+                            minimumTrackTintColor='black'
                             minimumValue={0}
-                            maximumValue={audioDuration}
-                            value={playbackPosition}
-                            onSlidingComplete={(value) => player?.seek(value)}
-                            
+                            maximumValue={duration}
+                            value={position}
+                            onSlidingComplete={(value) => seekPlayback(value)}
                         />
+
+
                         <View style={styles.playbackControls}>
-                            <Button title="5s Back" onPress={() => skipSeconds(-5)}  />
-                            <Button title={isPlaying ? "Stop" : "Play"} onPress={handlePlaybackToggle}  />
-                            <Button title="5s Forward" onPress={() => skipSeconds(5)}  />
+                            <TouchableOpacity
+                                onPress={() => skipSeconds(-3)}
+                                className='
+                                bg-black
+                                justify-center
+                                items-center
+                                rounded-full
+                                p-2
+                                h-12
+                                w-12
+                                '
+                            >
+                                <FontAwesomeIcon
+                                    icon={faArrowRotateLeft}
+                                    size={20}
+                                    style={{ color: 'white' }} />
+
+                                <Text className="
+                                absolute
+                                text-white
+                                text-[5px]
+                                font-semibold
+                                
+                                ">3s</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                            onPress={handlePlaybackToggle} 
+                            className='
+                            mt-2
+                            '
+                            >
+                                <FontAwesomeIcon
+                                    icon={isPlaying ? faPause : faPlay}
+                                    size={30}
+                                    style={{ color: 'black' }} />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => skipSeconds(3)}
+                                className='
+                                bg-black
+                                justify-center
+                                items-center
+                                rounded-full
+                                p-2
+                                h-12
+                                w-12
+                                '
+                            >
+                                <FontAwesomeIcon
+                                    icon={faArrowRotateRight}
+                                    size={20}
+                                    style={{ color: 'white' }} />
+
+                                <Text className="absolute
+                                text-white
+                                text-[5px]
+                                font-semibold
+                                ">3s</Text>
+                            </TouchableOpacity>
                         </View>
 
                     </>
@@ -276,9 +322,7 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
                         style={{
                             backgroundColor: isRecordingStarted ? 'black' : '#94abfe'
                         }}
-                        onPress={() => {
-                            isRecordingStarted ? handleRecordingStop() : handleRecording()
-                        }}
+                        onPress={isRecordingStarted ? handleStopRecording : handleRecording}
                     >
                         <Text
                             className='font-semibold'
@@ -311,32 +355,33 @@ export default AudioRecordingScreen;
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 20,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
     },
     sentenceText: {
-      fontSize: 24,
-      textAlign: 'center',
-      marginBottom: 40,
+        fontSize: 24,
+        textAlign: 'center',
+        marginBottom: 40,
     },
     playbackControls: {
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      width: '100%',
-      marginBottom: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '100%',
+        marginBottom: 20,
     },
     slider: {
-      width: '100%',
-      height: 40,
+        width: '100%',
+        height: 40,
+        color: 'black',
     },
     buttonContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '100%',
     },
     loader: {
-      marginTop: 20,
+        marginTop: 20,
     },
-  });
+});

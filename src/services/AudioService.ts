@@ -1,60 +1,90 @@
-// services/AudioService.ts
 import { Recorder, Player } from '@react-native-community/audio-toolkit';
 
-let currentRecorder: Recorder | null = null;
-let currentFilePath: string | null = null;
+let recorder: Recorder | null = null;
+let player: Player | null = null;
+let audioFilePath = 'hello.aac';
+let positionInterval: NodeJS.Timeout | null = null;
 
-export const startRecording = () => {
-  if (currentRecorder) {
-    console.log('Recording is already in progress.');
-    return;
-  }
-  
-  const fileName = `recording_${Date.now()}.flac`;
+export const startRecording = (currentIndex: number) => {
+  audioFilePath = `audio_${Date.now()}_${currentIndex}.aac`;
+  if (recorder) return;
+  recorder = new Recorder(audioFilePath, {
+    format: 'aac',          // Keep AAC for good compression & quality
+    sampleRate: 44100,      // Increase from 44100 → 48000 Hz (higher fidelity)
+    channels: 1,            // Stereo instead of mono
+    quality: 'high',         // 'high' → 'max' for the best internal preset
+    encoder: 'aac',          // Keep AAC
+    bitrate: 68000,         // Increase from 32 kbps → 128 kbps (higher bitrate = better quality)
+  });
+  recorder.record((err) => err && console.error('Recording start error:', err));
+};
 
-  currentRecorder = new Recorder(fileName, {
-    format: 'flac',
-    channels: 2,
-    sampleRate: 44100,
-    bitrate: 128000,
-    encoder: 'flac',
-    quality: 'high',
+export const stopRecording = (): string | null => {
+  if (!recorder) return null;
+  recorder.stop((err) => err && console.error('Recording stop error:', err));
+  recorder.destroy();
+  recorder = null;
+  return audioFilePath;
+};
+
+export const startPlayback = (
+  onPosition: (ms: number) => void,
+  onEnd?: () => void,
+  onReady?: (duration: number) => void
+) => {
+  if (player) return;
+
+  player = new Player(audioFilePath, { autoDestroy: false });
+
+  // Prepare player
+  player.prepare((err) => {
+    if (err) return console.error('Player prepare error:', err);
+
+    // Start playback immediately
+    player!.play((playErr) => {
+      if (playErr) return console.error('Player play error:', playErr);
+
+      // Poll position for slider
+      positionInterval = setInterval(() => {
+        if (player && typeof player.currentTime === 'number') {
+          onPosition(player.currentTime);
+        }
+      }, 200);
+
+      // Poll duration until valid
+      const durationPoll = setInterval(() => {
+        if (player && player.duration > 0) {
+          onReady && onReady(player.duration);
+          clearInterval(durationPoll);
+        }
+      }, 50);
+    });
   });
 
-  currentRecorder.prepare((err, fsPath) => {
-    if (err) {
-      console.error('Failed to prepare recorder:', err);
-      currentRecorder = null;
-    } else if (fsPath) {
-      currentFilePath = fsPath;
-      currentRecorder?.record(() => {
-        console.log('Recording started at:', fsPath);
-      });
-    }
+  (player as any).on('ended', () => {
+    stopPlayback();
+    onEnd && onEnd();
   });
 };
 
-export const stopRecording = async (): Promise<string> => {
-  if (!currentRecorder) {
-    throw new Error('No active recorder to stop.');
+
+
+export const stopPlayback = () => {
+  if (!player) return;
+  player.stop();
+  player.destroy();
+  player = null;
+
+  if (positionInterval) {
+    clearInterval(positionInterval);
+    positionInterval = null;
   }
+};
 
-  const recorderInstance = currentRecorder;
-  currentRecorder = null; 
+export const seekPlayback = (ms: number) => {
+  if (player) player.seek(ms);
+};
 
-  return new Promise((resolve, reject) => {
-    recorderInstance.stop((err) => {
-      if (err) {
-        reject(err);
-      } else {
-        if (currentFilePath) {
-          console.log('Recording stopped at:', currentFilePath);
-          recorderInstance.destroy(); 
-          resolve(currentFilePath);
-        } else {
-          reject(new Error('Recording path not found.'));
-        }
-      }
-    });
-  });
+export const getDuration = (): number => {
+  return player?.duration || 0;
 };
