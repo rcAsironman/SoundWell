@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, Button, StyleSheet, Alert } from 'react-native'
+import { View, TouchableOpacity, ScrollView, Button, StyleSheet, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import HeaderComponent from '../components/HeaderComponent'
 import ProgressIndicator from '../components/ProgressIndicator'
@@ -9,6 +9,7 @@ import LottieView from 'lottie-react-native';
 import AudioLottie from '/Users/kmangineni/Downloads/SoundWell/assets/AudioRecording.json'
 import { Player } from '@react-native-community/audio-toolkit';
 import Slider from '@react-native-community/slider';
+
 import {
     startRecording,
     stopRecording,
@@ -17,7 +18,7 @@ import {
     seekPlayback,
     getDuration
 } from '../services/AudioService';
-
+import Text from '../components/Text';
 
 const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
 
@@ -38,6 +39,7 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [position, setPosition] = useState(0);
     const [duration, setDuration] = useState(0);
+    const [isRecordingCompleted, setIsRecordingCompleted] = useState(false);
 
     useEffect(() => {
         Tts.setDefaultLanguage('en-US');
@@ -49,14 +51,25 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
         return () => {
             startSub.remove();
             finishSub.remove();
+            stopPlayback();
         };
     }, []);
 
     useEffect(() => {
+        let interval: NodeJS.Timeout | null = null;
+      
+        if (isPlaying && player) {
+          interval = setInterval(() => {
+            setPosition(player.currentTime || 0); // currentTime is a number
+          }, 100); // update every 100ms
+        }
+      
         return () => {
-            if (player) player.destroy();
+          if (interval) clearInterval(interval);
         };
-    }, [player]);
+      }, [isPlaying, player]);
+      
+      
 
     const handleSpeak = async () => {
         if (!isPlayClicked) {
@@ -69,8 +82,13 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
 
     const handleRecording = () => {
         Tts.stop();
+        stopPlayback();
+        setRecordingUri(null);
+        setIsPlaying(false);
+        setPosition(0);
         setIsRecordingStarted(true);
         startRecording(currentStep);
+        setIsRecordingCompleted(false);
 
     }
 
@@ -78,6 +96,7 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
         const audioPath = stopRecording();
         setIsRecordingStarted(false);
         setRecordingUri(audioPath); // Assuming the recorded file is saved as 'hello.aac'
+        setIsRecordingCompleted(true);
     }
 
     const handlePlaybackToggle = () => {
@@ -87,20 +106,23 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
             stopPlayback();
             setIsPlaying(false);
         } else {
-            
+
             startPlayback(
                 (pos) => setPosition(pos),       // updates slider
                 () => {                          // playback ended
                     setIsPlaying(false);
                     setPosition(0);
                 },
-                (dur) => setDuration(dur)        // set duration after player is ready
+                (dur) => setDuration(dur)  ,      // set duration after player is ready
+                position
             );
             setIsPlaying(true);
         }
     };
 
+    const handleNext = () => {
 
+    }
 
     const skipSeconds = (seconds: number) => {
         seekPlayback(position + seconds * 1000);
@@ -115,6 +137,7 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
 
         }}
             className='
+            
     '
         >
             <HeaderComponent />
@@ -139,7 +162,18 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
                 font-semibold
                 text-xl
                 '
-                            onPress={() => { navigation.navigate('Home') }}
+                            onPress={() => {
+                                // Stop any ongoing playback or TTS before navigating
+                                Tts.stop();
+                                stopPlayback();
+                                if (player) player.destroy();
+
+                                // Reset navigation stack and go to Home
+                                navigation.reset({
+                                    index: 0,
+                                    routes: [{ name: 'Home' }],
+                                });
+                            }}
                         >Exit</Text>
                     </TouchableOpacity>
                 </View>
@@ -198,6 +232,17 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
                 {recordingUri && (
                     <>
 
+                        <TouchableOpacity
+                            className='
+                    flex-row
+                    self-end
+                    mr-4
+                    '
+                            onPress={handleRecording}
+                        >
+                            <Text style={{ fontFamily: 'Roboto', fontSize: 20 }}>Retake</Text>
+                        </TouchableOpacity>
+
                         <Slider
                             style={styles.slider}
                             thumbTintColor='black'
@@ -211,7 +256,7 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
 
                         <View style={styles.playbackControls}>
                             <TouchableOpacity
-                                onPress={() => skipSeconds(-3)}
+                                onPress={() => skipSeconds(-1)}
                                 className='
                                 bg-black
                                 justify-center
@@ -233,11 +278,11 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
                                 text-[5px]
                                 font-semibold
                                 
-                                ">3s</Text>
+                                ">1s</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
-                            onPress={handlePlaybackToggle} 
-                            className='
+                                onPress={handlePlaybackToggle}
+                                className='
                             mt-2
                             '
                             >
@@ -247,7 +292,7 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
                                     style={{ color: 'black' }} />
                             </TouchableOpacity>
                             <TouchableOpacity
-                                onPress={() => skipSeconds(3)}
+                                onPress={() => skipSeconds(1)}
                                 className='
                                 bg-black
                                 justify-center
@@ -267,13 +312,12 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
                                 text-white
                                 text-[5px]
                                 font-semibold
-                                ">3s</Text>
+                                ">1s</Text>
                             </TouchableOpacity>
                         </View>
 
                     </>
                 )}
-
 
                 <View
                     style={{ flex: 1 }}
@@ -297,19 +341,29 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
                                 loop={true}
                             />
                         </>) : (
-                            <Text
-                                className='text-gray-300
-                            text-xl
-                            mb-6
-                            '
-                            >
-                                Ready to record? Click the button to get started.
-                            </Text>
+                            <>
+                                {
+                                    !isRecordingCompleted && (
+                                        <Text
+                                            className='
+                                            text-gray-300
+                                            text-xl
+                                            mb-6
+                                            '
+                                        >
+                                            Ready to record? Click the button to get started.
+                                        </Text>
+                                    )
+                                }
+                            </>
                         )
                     }
 
-                    <TouchableOpacity
-                        className='
+                    {
+                        isRecordingCompleted ? (<>
+
+                            <TouchableOpacity
+                                className='
                 flex-row
                 justify-center
                 items-center
@@ -319,31 +373,60 @@ const AudioRecordingScreen = ({ navigation }: { navigation: any }) => {
                 rounded-full
 
                 '
-                        style={{
-                            backgroundColor: isRecordingStarted ? 'black' : '#94abfe'
-                        }}
-                        onPress={isRecordingStarted ? handleStopRecording : handleRecording}
-                    >
-                        <Text
-                            className='font-semibold'
-                            style={{
-                                color: isRecordingStarted ? 'white' : 'black'
-                            }}
-                        >
-                            {
-                                isRecordingStarted ? "Stop Recording" : "Start Recording"
-                            }
-                        </Text>
-                        {
-                            !isRecordingStarted && (
-                                <FontAwesomeIcon
-                                    icon={faMicrophone}
-                                    size={18}
-                                    style={{ marginLeft: 10 }}
-                                />
-                            )
-                        }
-                    </TouchableOpacity>
+                                style={{
+                                    backgroundColor: '#94abfe'
+                                }}
+                                onPress={handleNext}
+                            >
+                                <Text
+                                    className='font-semibold '
+                                    style={{
+                                        color: 'black'
+                                    }}
+                                >
+                                    Next
+                                </Text>
+
+                            </TouchableOpacity>
+                        </>) : (<>
+                            <TouchableOpacity
+                                className='
+                flex-row
+                justify-center
+                items-center
+                py-6
+                mb-4
+                mt-2
+                rounded-full
+
+                '
+                                style={{
+                                    backgroundColor: isRecordingStarted ? 'black' : '#94abfe'
+                                }}
+                                onPress={isRecordingStarted ? handleStopRecording : handleRecording}
+                            >
+                                <Text
+                                    className='font-semibold'
+                                    style={{
+                                        color: isRecordingStarted ? 'white' : 'black'
+                                    }}
+                                >
+                                    {
+                                        isRecordingStarted ? "Done" : "Start Recording"
+                                    }
+                                </Text>
+                                {
+                                    !isRecordingStarted && (
+                                        <FontAwesomeIcon
+                                            icon={faMicrophone}
+                                            size={18}
+                                            style={{ marginLeft: 10 }}
+                                        />
+                                    )
+                                }
+                            </TouchableOpacity>
+                        </>)
+                    }
                 </View>
             </View>
         </View>

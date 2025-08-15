@@ -1,5 +1,6 @@
-import { View, Text, Image, Platform } from 'react-native';
+import { View, Image, Platform } from 'react-native';
 import React from 'react';
+import Text from './Text'
 
 const ProfileCard = ({ imgUrl, name }: { imgUrl: string, name: string }) => {
   return (

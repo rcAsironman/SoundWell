@@ -1,10 +1,11 @@
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, Alert, Platform } from 'react-native';
+import { View,  FlatList, TouchableOpacity, StyleSheet, Image, Alert, Platform } from 'react-native';
 import React, { FC } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { StackScreenProps } from '@react-navigation/stack';
 import { users } from '../data/users';
+import Text  from '../components/Text';
 
 // Define the type for a single user item
 interface User {

@@ -1,8 +1,9 @@
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import React from 'react'
 import Toast from "react-native-toast-message";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ToastColors } from '../constants/colors';
+import Text from './Text'
 
 const ToastComponent = () => {
 

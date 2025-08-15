@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Platform, Alert } from 'react-native';
+import { View,  StyleSheet, TouchableOpacity, Image, Platform, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import Slider from 'react-native-slide-to-unlock';
 import { StackScreenProps } from '@react-navigation/stack';
+import Text  from '../components/Text';
 
 // Define the type for the navigation stack's parameters.
 // Replace 'RootStackParamList' with your actual stack param list name.

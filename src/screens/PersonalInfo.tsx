@@ -1,6 +1,5 @@
 import {
     View,
-    Text,
     KeyboardAvoidingView,
     ScrollView,
     Image,
@@ -13,6 +12,7 @@ import { Picker } from '@react-native-picker/picker';
 import Modal from 'react-native-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import Text  from '../components/Text';
 
 function ModalGender({
     isVisible,

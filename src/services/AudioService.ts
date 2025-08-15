@@ -30,7 +30,8 @@ export const stopRecording = (): string | null => {
 export const startPlayback = (
   onPosition: (ms: number) => void,
   onEnd?: () => void,
-  onReady?: (duration: number) => void
+  onReady?: (duration: number) => void,
+  fromPosition?: number // optional starting position in ms
 ) => {
   if (player) return;
 
@@ -39,6 +40,11 @@ export const startPlayback = (
   // Prepare player
   player.prepare((err) => {
     if (err) return console.error('Player prepare error:', err);
+
+    // Seek to position if provided
+    if (fromPosition && fromPosition > 0) {
+      player!.currentTime = fromPosition;
+    }
 
     // Start playback immediately
     player!.play((playErr) => {
@@ -66,6 +72,7 @@ export const startPlayback = (
     onEnd && onEnd();
   });
 };
+
 
 
 

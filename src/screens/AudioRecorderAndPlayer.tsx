@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, Text, StyleSheet } from 'react-native';
+import { View, Button,  StyleSheet } from 'react-native';
 import { Player, Recorder } from '@react-native-community/audio-toolkit';
+import Text  from '../components/Text';
 
 const AudioRecorderAndPlayer = () => {
   const [isRecording, setIsRecording] = useState(false);

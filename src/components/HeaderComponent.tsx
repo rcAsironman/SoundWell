@@ -1,9 +1,10 @@
-import { View, Text, TouchableOpacity, Platform } from 'react-native'
+import { View, TouchableOpacity, Platform } from 'react-native'
 import React from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 import { useNavigation } from '@react-navigation/native'
+import Text from './Text'
 
 
 const HeaderComponent = () => {

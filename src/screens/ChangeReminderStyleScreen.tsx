@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native';
+import { StyleSheet, View,  TouchableOpacity, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faAngleLeft, faBell, faBan } from '@fortawesome/free-solid-svg-icons';
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 import { showSuccessToast } from '../utils/toast';
+import Text  from '../components/Text';
 
 const ChangeReminderStyleScreen = () => {
   const navigation = useNavigation(); // Use the useNavigation hook

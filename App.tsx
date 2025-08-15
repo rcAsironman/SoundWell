@@ -1,8 +1,21 @@
+import { Text as RNText, Platform } from 'react-native';
+
+if (Platform.OS === 'android') {
+  const TextAny = RNText as any; // bypass TS type error
+  const defaultStyle = TextAny.defaultProps?.style || {};
+  TextAny.defaultProps = {
+    ...TextAny.defaultProps,
+    style: [{ fontFamily: 'Roboto' }, defaultStyle],
+  };
+}
+
+
+
 import "./global.css"
-import { Text, View } from "react-native";
+import {  View } from "react-native";
 import LoginScreen from "./src/screens/authScreens/LoginScreen";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { StatusBar, Platform } from 'react-native';
+import { StatusBar } from 'react-native';
 import RNBootSplash from "react-native-bootsplash"
 import { useEffect } from "react";
 import RegisterScreen from "./src/screens/authScreens/RegisterScreen";
@@ -68,6 +81,7 @@ export default function App() {
 
     requestPermissions();
   }, []);
+  
   return (
     <SafeAreaProvider  style={{flex: 1}}>
        <View style={{flex:1, backgroundColor: 'white'}}>

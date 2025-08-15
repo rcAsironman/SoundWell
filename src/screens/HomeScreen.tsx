@@ -1,4 +1,4 @@
-import { View, Text, FlatList, ScrollView, Touchable, TouchableOpacity } from 'react-native'
+import { View,  FlatList, ScrollView, Touchable, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import HeaderComponent from '../components/HeaderComponent'
@@ -7,6 +7,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { helpfulLinks } from '../data/helpfulLinks';
 import HelpfulLinkCardComponent from '../components/HelpfulLinkCardComponent';
 import ChatBotComponent from '../components/ChatBotComponent';
+import Text  from '../components/Text';
 
 
 

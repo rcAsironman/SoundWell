@@ -1,7 +1,8 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import {    faRobot } from '@fortawesome/free-solid-svg-icons'
+import Text from './Text'
 
 const ChatBotComponent = () => {
   return (
@@ -12,7 +13,7 @@ const ChatBotComponent = () => {
     bottom-40
     right-10
     bg-soundWell-primary
-    p-4
+    p-6
     rounded-full
 
     '
@@ -26,7 +27,7 @@ const ChatBotComponent = () => {
     >
         <FontAwesomeIcon
             icon={faRobot}
-            size={24}
+            size={28}
             color="#fff"
             style={{ alignSelf: 'center' }}     
     />

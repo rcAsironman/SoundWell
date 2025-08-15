@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
@@ -15,7 +14,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { showSuccessToast, showWarningToast, showErrorToast } from '../../utils/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
-
+import Text from '../../components/Text';
 
 
 const Timer = 5;

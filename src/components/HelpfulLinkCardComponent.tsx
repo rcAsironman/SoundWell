@@ -1,5 +1,6 @@
-import { View, Text, Image, TouchableOpacity  } from 'react-native'
+import { View, Image, TouchableOpacity  } from 'react-native'
 import React from 'react'
+import Text from './Text'
 
 const HelpfulLinkCardComponent = ({imgUrl, url}:{imgUrl: string, url: string}) => {
   return (

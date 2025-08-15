@@ -1,8 +1,9 @@
-import { View, Text, FlatList, TouchableOpacity, Platform, Dimensions } from 'react-native'
+import { View, FlatList, TouchableOpacity, Platform, Dimensions } from 'react-native'
 import React from 'react'
 import ProfileCard from '../components/ProfileCard'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { users } from '../data/users'
+import Text  from '../components/Text';
 
 const ProfilesScreen = ({navigation}: {navigation: any}) => {
   const insets = useSafeAreaInsets();

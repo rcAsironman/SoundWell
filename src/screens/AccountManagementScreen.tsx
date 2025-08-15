@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import Text  from '../components/Text';
 
 const AccountManagementScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
@@ -37,7 +38,10 @@ const AccountManagementScreen = ({ navigation }) => {
             w-12
             rounded-full
             '
-            onPress={() => {navigation.navigate('Profile')}}
+            onPress={() => {navigation.reset({
+              index: 0,
+              routes: [{ name: 'Profile' }],
+            })}}
             >
                 <FontAwesomeIcon
                     icon={faAngleLeft}

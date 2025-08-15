@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View,  TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-native-date-picker';
 import { showErrorToast, showSuccessToast } from '../utils/toast';
+import Text  from '../components/Text';
 
 // Assuming you have a navigation object from React Navigation
 const ChangeReminderScreen = ({ navigation }:{navigation: any}) => {

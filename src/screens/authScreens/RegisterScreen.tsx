@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   Platform,
   Image,
   ScrollView,
@@ -17,6 +16,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faMugSaucer, faEnvelope } from '@fortawesome/free-solid-svg-icons/'
 import { faEnvelope as farEnvelope, } from '@fortawesome/free-regular-svg-icons'
+import Text from '../../components/Text';
 
 type UserInputs = {
   firstName: string;

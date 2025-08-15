@@ -1,5 +1,5 @@
 import React, { useState, useRef, useMemo, useCallback } from 'react';
-import { View, Text, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, TouchableOpacity, Image, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faAngleLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +10,7 @@ import {
 } from 'react-native-image-picker';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Text  from '../components/Text';
 
 // Local default image
 const DEFAULT_PROFILE_IMAGE = require('/Users/kmangineni/Downloads/SoundWell/assets/profileImg.jpg');
@@ -71,7 +72,10 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                     style={{ paddingTop }}
                 >
                     <TouchableOpacity className="h-12 w-12 rounded-full bg-white items-center justify-center"
-                    onPress={() => navigation.navigate('Home')}
+                    onPress={() => navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'Home' }],
+                      })}
                     >
                         <FontAwesomeIcon icon={faAngleLeft} size={18} color="#000" />
                     </TouchableOpacity>
